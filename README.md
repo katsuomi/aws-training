@@ -1,1 +1,1 @@
-# aws-training
+# Sample codes for AWS SDK
