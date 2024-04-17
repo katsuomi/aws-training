@@ -1,1 +1,68 @@
 # Work 8
+### Work 8-1 DynamoDB を操作してみよう (CLI)
+- Lab 3 (Python) を起動し、AWS マネジメントコンソールにサインインします
+- Cloud9 のページを表示して 用意された環境を開きます
+- ターミナルより、以下の CLI コマンドを実行してください
+- (1) 以下の要件を満たすテーブルを作成してください
+  - テーブル名: Books、パーティションキー: Title、ソートキー: Volume
+  - キャパシティーモード: プロビジョンド、読み込みキャパシティユニット (RCU): 5、書き込みキャパシティユニット (WCU): 5
+- (2) 項目を追加しましょう (以下のコマンドを実行してください)
+  - ```$ aws dynamodb put-item --table-name Books --item '{"Title": {"S": "AWS Quest"}, "Volume": {"N": "1"}, "price": {"N": "1000"}}'```
+  - ```$ aws dynamodb put-item --table-name Books --item '{"Title": {"S": "Cloud Story"}, "Volume": {"N": "2"}, "price": {"N": "3000"}}'```
+  - ```$ aws dynamodb put-item --table-name Books --item '{"Title": {"S": "Cloud Story"}, "Volume": {"N": "1"}}'```
+  - ```$ aws dynamodb put-item --table-name Books --item '{"Title": {"S": "AWS Quest 2"}, "Volume": {"N": "1"}}'```
+  - ```$ aws dynamodb put-item --table-name Books --item '{"Title": {"S": "Cloud Story"}, "Volume": {"N": "3"}, "price": {"N": "3000"}}'```
+- (3) Title が「AWS Quest」、Volume が 「1」の項目を取得してください (Scan は使わないでください)
+- (4) Title が「Cloud Story」の項目をすべて取得してください (Scan は使わないでください)
+- (5) マネジメントコンソールで、テーブルの作成・データの追加ができていることを確かめましょう
+  - DynamoDB」→ 「テーブル」→ 「テーブルアイテムの探索」
+
+### Work 8-2 スロットリングを体験してみよう (SDK)
+- メニューから "File" - "New File" を選択し、下記 3 つのファイルを作成、保存してください
+- create\_table.py
+  - [create\_table.py](https://github.com/katsuomi/aws-training/blob/master/DEV/work8/create_table.py) を表示して、コードをすべてコピペします
+  - 作成するテーブルの内容
+    - テーブル名: `DemoTable`  
+    - プライマリキー  
+      - パーティションキー: `user_id`  
+      - ソートキー: `game_id`  
+    - キャパシティ  
+      - 読み取りキャパシティ (RCU): 1  
+      - 書き込みキャパシティ (WCU): 5    
+  - ファイルを保存しましょう
+- insert\_data.py
+  - [insert\_data.py](https://github.com/katsuomi/aws-training/blob/master/DEV/work8/insert_data.py) を表示して、コードをすべてコピペします
+  - 追加する項目の内容
+    - user\_id: `user100`  
+    - game\_id: `game100`  
+    - score: `100`  
+    - data: `aaa・・・` (a が 5,120 個で 5 KB)    
+  - ファイルを保存しましょう
+- query\_table.py
+  - [query\_table.py](https://github.com/katsuomi/aws-training/blob/master/DEV/work8/query_table.py) を表示して、コードをすべてコピペします
+  - 検索内容  
+    - `Query` で強い整合性のある読み取り (`ConsistentRead=True`)
+    - 意図的にスロットリングを起こすためにリトライはしない設定にしています (`max_attempts=0`)
+    - `ReturnConsumedCapacity='TOTAL'` で、実行結果に消費した RCU 情報を含めています  
+  - ファイルを保存しましょう
+- 以下のコマンドを実行します  
+  - ```$ python ./create\_table.py```
+  - ```$ python ./insert\_data.py```
+- 以下のコマンドを実行します
+  - ```$ for i in $(seq 1 100); do python ./query\_table.py & done```
+  - このコマンドは `query_table.py` を 100 個、バックグラウンドで並列実行します
+  - データが 5 KB 少々 (4 KB と 8KB の間) で「強い整合性のある読み取り」なので、1 回の読み取りあたり 2 RCU を消費します
+  - それが 100 並列同時に実行されるとすると、200 RCU 必要です  
+  - 一方、テーブルの RCU は 1 です。ただし DynamoDB には[バースト機能](https://docs.aws.amazon.com/ja_jp/amazondynamodb/latest/developerguide/bp-partition-key-design.html#bp-partition-key-throughput-bursting)があるので、単純にテーブルの RCU を超えただけではスロットリングしません 
+- `$ jobs` と打つと、バックグラウンドジョブ（& で起動した python コマンド）の実行状況を確認できます
+- 100 並列が全て正常終了したら、再度 100 並列でコマンドを実行してください
+  - (ターミナル画面で上下矢印キーを押すと過去に実行したコマンド履歴を呼び出せます)  
+- 以前の 100 並列が終了してから次の 100 並列を実行してください (メモリ不足を避けるため)
+- 100 並列を何度か流して、下記のようなスロットリングエラーが発生するか確認してください 
+  - botocore.errorfactory.ProvisionedThroughputExceededException: An error occurred (ProvisionedThroughputExceededException) when calling the Query operation (reached max retries: 0): The level of configured provisioned throughput for the table was exceeded. Consider increasing your provisioning level with the UpdateTable API.  
+- `query_table.py` の最後に下記の１文を追加して再実行することで、消費したキャパシティユニットの量が確認できます
+  - print(response)
+  - 出力に `'CapacityUnits': 2.0` というのが含まれていることを確認してください
+- 以下の CLI コマンドでテーブルを削除しておきましょう
+  - $ aws dynamodb delete-table —table-name DemoTable  
+  - $ aws dynamodb wait table-not-exists —table-name DemoTable
