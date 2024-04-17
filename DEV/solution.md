@@ -3,7 +3,7 @@
 **Q. aws s3 cp コマンドとはどんなコマンドですか？リファレンスをウェブ上で探してください**
 **(version が 1.xx 系と 2.xx 系があります。2.xx 系を調べてください)**
 
-A. オブジェクト（ファイル）をコピーするコマンド
+A. オブジェクト (ファイル) をコピーするコマンド
 https://awscli.amazonaws.com/v2/documentation/api/latest/reference/s3/cp.html/
 
 ### AWS SDK
