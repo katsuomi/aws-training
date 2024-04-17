@@ -16,7 +16,7 @@
 - Lab 2 (Python) を起動し、AWS マネジメントコンソールにサインインします
 - Cloud9 のページを表示して 用意された環境を開きます  
 - メニューから "File" - "New File" を選択します
-- [work5-2.py](https://github.com/katsuomi/aws-training/blob/master/DEV/work5/work5-2.py){target="\_blank"} を表示して、コードをすべてコピペします
+- <a href='https://github.com/katsuomi/aws-training/blob/master/DEV/work5/work5-2.py' target="_blank">work5-2.py</a> を表示して、コードをすべてコピペします
 - メニューから “File” - “Save” を選択します
 - "Filename" に work5-2.py と入力し、 [ Save ] をクリックします
 - 下記のどちらかの手順 (手順 ① or 手順 ②) を実行してください
