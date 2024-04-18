@@ -1,0 +1,35 @@
+# Work13
+- Lab 7 (Python) を起動し、AWS マネジメントコンソールにサインインします
+- Cloud9 のページを表示して 用意された環境を開きます
+- SAM CLI を使用して、ローカルマシン上にサンプルの Hello World アプリケーションプロジェクトを作成します
+- ターミナルより、下記のコマンドを実行してください
+- ```$ sam init```
+  - **1** - AWS Quick Start Templates
+  - **1** - Hello World Example
+  - Use the most popular runtime and package type? (Python and zip) [y/N]: **N**
+  - Which runtime would you like to use?: **17 (Python 3.8)**
+  - What package type would you like to use?: **1** (Zip)
+  - Would you like to enable X-Ray tracing on the function(s) in your application? [y/N]: **N**
+  - Would you like to enable monitoring using CloudWatch Application Insights? [y/N]: **N**
+  - Would you like to set Structured Logging in JSON format on your Lambda functions? [y/N]: **N**
+  - Project name [sam-app]: **何も入力せずに enter** 
+- これで、サーバーレスアプリケーションがローカルマシン上に完成しました
+- 作成されたファイルの中身を見てみましょう
+- ```$ cd sam-app/```
+- 左のサイドバーより、sam-app ディレクトリ配下の下記ファイルの中身を見てみてください (ざっくりで大丈夫です)
+  - hello_world/app.py: Lambda 関数コードが含まれます
+  - hello_world/requirements.txt: Lambda 関数に必要な Python 依存関係が含まれます
+  - samconfig.toml: SAM CLI によって使用されるデフォルトのパラメータを保存するアプリケーションの設定ファイル
+  - template.yaml: アプリケーションインフラストラクチャコードを含む SAM テンプレート
+- では、作成したアプリケーションをビルドしてみましょう
+- ```$ sam build```
+- SAM CLI は .aws-sam ディレクトリを作成し、そこに関数の依存関係、プロジェクトコード、およびプロジェクトファイルを格納します
+- .aws-sam ディレクトリは隠しファイルであり、デフォルトでは Cloud9 画面から見ることができません (サイドバーに表示されていないと思います)
+- サイドバーの右上の歯車マークを押下し、```Show Hidden Files``` をクリックしてください
+- sam-app ディレクトリ配下に .aws-sam ディレクトリが確認できます
+- .aws-sam ディレクトリを確認してみましょう
+  - build/HelloWorldFunction – Lambda 関数のコードと依存関係が含まれます。AWS SAM CLI は、アプリケーション内の関数ごとにディレクトリを作成します
+  - build/template.yaml – デプロイ時に AWS CloudFormation によって参照される AWS SAM テンプレートのコピーが含まれます
+  - build.toml – アプリケーションの構築およびデプロイ時に AWS SAM CLI によって参照されるデフォルトのパラメータ値を保存する設定ファイル
+- これで、アプリケーションをデプロイする準備が整いました
+- Lab の権限ではこのアプリケーションのデプロイができないので、ワークは以上です
