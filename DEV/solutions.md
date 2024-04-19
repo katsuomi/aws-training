@@ -4,7 +4,7 @@
 **(version が 1.xx 系と 2.xx 系があります。2.xx 系を調べてください)**
 
 A. オブジェクト (ファイル) をコピーするコマンド
-https://awscli.amazonaws.com/v2/documentation/api/latest/reference/s3/cp.html/
+https://awscli.amazonaws.com/v2/documentation/api/latest/reference/s3/cp.html
 
 ### AWS SDK
 **Q. Boto3 の create_bucket の引数の情報が載っている公式の API ドキュメントを探してください**
