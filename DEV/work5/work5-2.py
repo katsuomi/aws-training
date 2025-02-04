@@ -20,12 +20,17 @@ try:
 except:
     print("Bucket does not exist")
     # create_bucket でバケットを region に作成します
-    s3.create_bucket(
-        Bucket=bucket_name,
-        CreateBucketConfiguration={
-            'LocationConstraint': region
-        }
-    )
+    if region == 'us-east-1':
+        s3.create_bucket(
+            Bucket=bucket_name # us-east-1 の場合、CreateBucketConfiguration オプションは不要
+        )
+    else:
+        s3.create_bucket(
+            Bucket=bucket_name,
+            CreateBucketConfiguration={
+                'LocationConstraint': region
+            }
+        )
     # バケット作成完了まで待つ（crate_bucket は非同期処理です）
     s3.get_waiter("bucket_exists").wait(Bucket=bucket_name)
     print("Bucket created")
