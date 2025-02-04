@@ -14,8 +14,6 @@ A. ```$ aws s3 mb s3://notes-bucket-from-cli-{ランダムな文字列} <- バ�
 
 or  
 
-A. ```$ aws s3api create-bucket --bucket notes-bucket-from-cli-{ランダムな文字列} --region={ラボで指定されたリージョン}```
-
 A. ラボで指定されたリージョンが **us-east-1** の場合
  - ```$ aws s3api create-bucket --bucket notes-bucket-from-cli-{ランダムな文字列} --region={ラボで指定されたリージョン}```
 
