@@ -16,6 +16,12 @@ or
 
 A. ```$ aws s3api create-bucket --bucket notes-bucket-from-cli-{ランダムな文字列} --region={ラボで指定されたリージョン}```
 
+A. ラボで指定されたリージョンが **us-east-1** の場合
+ - ```$ aws s3api create-bucket --bucket notes-bucket-from-cli-{ランダムな文字列} --region={ラボで指定されたリージョン}```
+
+A. ラボで指定されたリージョンが **us-east-1** ではない場合
+ - ```$ aws s3api create-bucket --bucket notes-bucket-from-cli-{ランダムな文字列} --create-bucket-configuration LocationConstraint={ラボで指定されたリージョン}```
+ 
 notes-bucket- から始まるバケット名でなければ、バケットの作成・削除等ができないのでご注意ください
 
 **Q. 作成したバケットのリージョンを取得してください**
