@@ -10,15 +10,19 @@ A. ```$ aws s3api list-buckets```
 
 **Q. バケットを作成してください**
  
-A. ```$ aws s3 mb s3://{他の人と被らないような適当な文字列} <- バケット名になります！``` 
+A. ```$ aws s3 mb s3://notes-bucket-from-cli-{ランダムな文字列} <- バケット名になります！``` 
 
 or  
 
-A. ```$ aws s3api create-bucket --bucket {他の人と被らないような適当な文字列} --create-bucket-configuration LocationConstraint={ラボで指定されたリージョン}```
+A. ```$ aws s3api create-bucket --bucket notes-bucket-from-cli-{ランダムな文字列} --region={ラボで指定されたリージョン}```
+
+notes-bucket- から始まるバケット名でなければ、バケットの作成・削除等ができないのでご注意ください
 
 **Q. 作成したバケットのリージョンを取得してください**
 
 A. ```$ aws s3api get-bucket-location --bucket {作成したバケットの名前}```
+
+ラボで us-east-1 (バージニア北部リージョン) を利用している場合、null が返ります
 
 **Q. 作成したバケットを削除してください**
 
