@@ -1,1 +1,1 @@
-# Sample codes for AWS SDK
+# Sample codes
